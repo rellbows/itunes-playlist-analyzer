@@ -3,8 +3,8 @@ Filename: playlist.py
 Description: Script that can parse and analyze iTunes playlist files. Covered in "Python Playground" book by Mahesh Venkitachalam.
 
 TODO: 
-1) Test out 'findDuplicates' method
-2) Pick up on 'Extracting Duplicates'
+1) Implement 'findingCommonTracks' method
+2) Test this method
 """
 
 import argparse

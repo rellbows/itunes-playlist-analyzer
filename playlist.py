@@ -25,11 +25,8 @@ def findDuplicates(fileName):
 	for trackId, track in tracks.items():
 		try:
 			name = track['Name']
-			# TESTING!
-			print("Track: %s" % name)
 			duration = track['Total Time']
-			# TESTING!
-			print(" Time: %d\n" % duration)
+			
 			# checks if there is an entry matching
 			if name in trackNames:
 				# if name/duration match, inc count
@@ -43,9 +40,6 @@ def findDuplicates(fileName):
 		except:
 			# ignore
 			pass
-
-		# TESTING!
-		print(trackNames)
 	# store duplicates as (name, count) tuples
 	dups = []
 	for k, v in trackNames.items():

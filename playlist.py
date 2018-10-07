@@ -7,7 +7,8 @@ TODO:
 2) Pick up on 'Extracting Duplicates'
 """
 
-import pList
+import argparse
+import plistlib
 
 def findDuplicates(fileName):
 	"""
@@ -15,7 +16,7 @@ def findDuplicates(fileName):
 	"""
 	print('Finding duplicate tracks in %s...' % fileName)
 	# read in playlist
-	pList = plist.lib.readPlist(fileName)
+	plist = plistlib.readPlist(fileName)
 	# get the tracks
 	tracks = plist['Tracks']
 	# create a track name dict
@@ -24,7 +25,7 @@ def findDuplicates(fileName):
 	for trackId, track in tracks.items():
 		try:
 			name = track['Name']
-			duration = track['Total Time]
+			duration = track['Total Time']
 			# checks if there is an entry matching
 			if name in trackNames:
 				# if name/duration match, inc count
@@ -38,3 +39,50 @@ def findDuplicates(fileName):
 		except:
 			# ignore
 			pass
+	# store duplicates as (name, count) tuples
+	dups = []
+	for k, v in trackNames.items():
+		if v[1] > 1:
+			dups.append((v[1], k))
+	# save duplicates to a file
+	if len(dups) > 0:
+		print("Found %d duplicates. Track names saved to dup.txt" % len(dups))
+	else:
+		print("No duplicate tracks found!")
+	f = open("dups.txt", "w")
+	for val in dups:
+		f.write("[%d] %s\n" % (val[0], val[1]))
+	f.close()
+
+def main():
+	# create parser
+	descStr = """
+	This program analyzes playlist files (.xml) exported from iTunes.
+	"""
+	parser = argparse.ArgumentParser(description=descStr)
+	# adds a mutually exclusive group of arguments
+	group = parser.add_mutually_exclusive_group()
+
+	# add expected arguments
+	# group.add_argument('--common', nargs='*', dest='plFiles', required=False)
+	# group.add_argument('--stats', dest='plFile', required=False)
+	group.add_argument('--dup', dest='plFileD', required=False)
+
+	# parse args
+	args=parser.parse_args()
+
+	# if args.plFiles:
+		# find common tracks
+		# findCommonTracks(args.plFiles)
+	# elif args.p1Files:
+		# plot stats(args.plFile)
+		# plotStats(args.plFile)
+	if args.plFileD:
+		# find duplicate tracks
+		findDuplicates(args.plFileD)
+	else:
+		print("Ooops, looks like the option you entered is not valid!")
+
+# main method
+if __name__ == '__main__':
+	main()		
